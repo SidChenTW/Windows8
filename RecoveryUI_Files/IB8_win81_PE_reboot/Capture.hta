@@ -1,0 +1,59 @@
+<html> 
+<head> 
+<title>Capture select</title>
+<HTA:APPLICATION 
+  APPLICATIONNAME=¡¨MainModal¡¨>
+</head>
+
+<SCRIPT Language="VBScript">
+Sub Window_onLoad
+        window.resizeTo 600,200
+    End Sub 
+
+Sub Capture_C 
+ blnAnswer = window.confirm("Capture C:")
+ Set objShell = CreateObject("Wscript.Shell")
+    If blnAnswer Then
+		CaptureFromDriveLetter="c:\"
+		SaveCaptureToPath="c:\WIN81.wim"
+        MsgBox "dism /Capture-Image /CaptureDir:" & CaptureFromDriveLetter & " /ImageFile:" & SaveCaptureToPath & " /Name:Windows"
+		objShell.Run "dism /Capture-Image /CaptureDir:" & CaptureFromDriveLetter & " /ImageFile:" & SaveCaptureToPath & " /Name:Windows",1,true
+        Else
+    End If  
+End Sub
+
+Sub Capture_D 
+ blnAnswer = window.confirm("Capture D:")
+ Set objShell = CreateObject("Wscript.Shell")
+    If blnAnswer Then
+        CaptureFromDriveLetter="d:\"
+		SaveCaptureToPath="d:\WIN81.wim"
+        MsgBox "dism /Capture-Image /CaptureDir:" & CaptureFromDriveLetter & " /ImageFile:" & SaveCaptureToPath & " /Name:Windows"
+		objShell.Run "dism /Capture-Image /CaptureDir:" & CaptureFromDriveLetter & " /ImageFile:" & SaveCaptureToPath & " /Name:Windows",1,true
+        Else
+    End If  
+End Sub
+
+Sub Capture_E 
+ blnAnswer = window.confirm("Capture E:")
+ Set objShell = CreateObject("Wscript.Shell")
+    If blnAnswer Then
+        CaptureFromDriveLetter="e:\"
+		SaveCaptureToPath="e:\WIN81.wim"
+        MsgBox "dism /Capture-Image /CaptureDir:" & CaptureFromDriveLetter & " /ImageFile:" & SaveCaptureToPath & " /Name:Windows"
+		objShell.Run "dism /Capture-Image /CaptureDir:" & CaptureFromDriveLetter & " /ImageFile:" & SaveCaptureToPath & " /Name:Windows",1,true
+        Else
+    End If  
+End Sub
+</SCRIPT> 
+
+<body> 
+<TABLE width="300">
+<TR>
+<TD><center><input type="button" value="Capture C" name="no"  onClick="Capture_C" class="btn"> </TD>
+<TD><center><input type="button" value="Capture D" name="no"  onClick="Capture_D" class="btn"> </TD>
+<TD><center><input type="button" value="Capture E" name="no"  onClick="Capture_E" class="btn"> </TD>
+</TR>
+</TABLE>
+</body> 
+</html>

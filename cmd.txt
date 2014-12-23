@@ -1,0 +1,20 @@
+copype amd64 C:\PE5
+Dism /Mount-Image /ImageFile:"C:\PE5\media\sources\boot.wim" /index:1 /MountDir:"C:\PE5\mount"
+Dism /Unmount-Image /MountDir:"C:\PE5\mount" /commit
+MakeWinPEMedia /ISO C:\PE5 C:\PE5\PE5.iso
+dism /Capture-Image /CaptureDir:D:\ /ImageFile:E:\ThinImage.wim /Name:"Contoso"
+dism /Apply-Image /ImageFile:"R:\RecoveryImage\Install.wim" /Index:1 /ApplyDir:W:\
+
+Dism /image:c:\PE5\mount /add-package /packagepath:"C:\Program Files (x86)\Windows Kits\8.1\Assessment and Deployment Kit\Windows Preinstallation Environment\amd64\WinPE_OCs\WinPE-Scripting.cab"
+Dism /image:c:\PE5\mount /add-package /packagepath:"C:\Program Files (x86)\Windows Kits\8.1\Assessment and Deployment Kit\Windows Preinstallation Environment\amd64\WinPE_OCs\WinPE-HTA.cab"
+Dism /image:c:\PE5\mount /add-package /packagepath:"C:\Program Files (x86)\Windows Kits\8.1\Assessment and Deployment Kit\Windows Preinstallation Environment\amd64\WinPE_OCs\WinPE-WMI.cab"
+
+Dism /image:c:\PE5\mount /add-package /packagepath:"C:\Program Files (x86)\Windows Kits\8.1\Assessment and Deployment Kit\Windows Preinstallation Environment\amd64\WinPE_OCs\zh-tw\WinPE-Scripting.cab"
+Dism /image:c:\PE5\mount /add-package /packagepath:"C:\Program Files (x86)\Windows Kits\8.1\Assessment and Deployment Kit\Windows Preinstallation Environment\amd64\WinPE_OCs\zh-tw\WinPE-HTA.cab"
+Dism /image:c:\PE5\mount /add-package /packagepath:"C:\Program Files (x86)\Windows Kits\8.1\Assessment and Deployment Kit\Windows Preinstallation Environment\amd64\WinPE_OCs\zh-tw\WinPE-WMI.cab"
+
+
+
+Dism /image:c:\PE5\mount /add-package /packagepath:"C:\Program Files (x86)\Windows Kits\8.1\Assessment and Deployment Kit\Windows Preinstallation Environment\amd64\WinPE_OCs\en-us\WinPE-Scripting_en-us.cab"
+Dism /image:c:\PE5\mount /add-package /packagepath:"C:\Program Files (x86)\Windows Kits\8.1\Assessment and Deployment Kit\Windows Preinstallation Environment\amd64\WinPE_OCs\en-us\WinPE-HTA_en-us.cab"
+Dism /image:c:\PE5\mount /add-package /packagepath:"C:\Program Files (x86)\Windows Kits\8.1\Assessment and Deployment Kit\Windows Preinstallation Environment\amd64\WinPE_OCs\en-us\WinPE-WMI_en-us.cab"

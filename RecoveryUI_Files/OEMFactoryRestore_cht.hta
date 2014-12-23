@@ -1,0 +1,147 @@
+﻿<HTML>
+<HEAD>
+<TITLE>Backup/Recovery Program</TITLE>
+<HTA:APPLICATION
+BORDER = yes
+COMPANY = Microsoft
+APPLICATION = Yes
+WINDOWSTATE = maximize
+INNERBORDER = No
+SHOWINTASKBAR = Yes
+SCROLL = no
+APPLICATIONNAME = "備份/還原程式"
+NAVIGABLE = Yes
+CAPTION = No
+>
+
+<STYLE> 
+.1{color: #FFFFFF; font-family: tahoma; font-size: 8pt; font-weight: bold}
+.2{color: #FFFFFF; font-family: tahoma; font-size: 10pt; font-weight: bold}
+input.btn {color:#FFFFFF; font-family: tahoma; font-size: 10pt; font-weight: bold; width:175; background-color: #5086A1; border-color: #C0D4EF
+</STYLE>
+</HEAD>
+<script language="VBScript">
+Sub activate
+Cmd_yes.disabled = false
+WIN7_apply_yes.disabled = false
+WIN7_capture_yes.disabled = false
+End Sub
+
+Sub deactivate
+Cmd_yes.disabled = true
+WIN7_apply_yes.disabled = true
+WIN7_capture_yes.disabled = true
+End Sub
+
+Sub Cmd
+Const HKEY_LOCAL_MACHINE = &H80000002
+Set objShell = CreateObject("Wscript.Shell")
+objShell.Run "cmd.exe",1,false
+End Sub
+
+Sub WIN7Recovery
+    Set objShell = CreateObject("Wscript.Shell")
+RecoveryFile="\Recovery\win7.wim"
+FindRecoveryFile=0
+'''''''''Serarch the file path which exist the wim file''''''''
+set filesys = CreateObject("Scripting.FileSystemObject")
+For Each DiskDrive in filesys.Drives
+    DriveLetterAndFilePath = DiskDrive.DriveLetter & ":" & RecoveryFile
+    'MsgBox DriveLetterAndFilePath
+    if (filesys.FileExists(DriveLetterAndFilePath)) then
+        FindRecoveryFile=1
+        Set objShell = CreateObject("Wscript.Shell")
+        blnAnswer = window.confirm("你確定要繼續嗎? 原來的WIN7將被清除喔")
+        If blnAnswer Then            
+objShell.Run "diskpart.exe /s x:\Windows\System32\CleanDisk.txt",1,true
+       objShell.Run "ISA.exe /apply " & DriveLetterAndFilePath & " 1 d:\",1,true
+       'objShell.Run "bcdboot c:\windows /s c:",0,true
+        Else
+        End If
+    else        
+    End if
+Next
+If  FindRecoveryFile Then
+    blnAnswer = window.confirm("系統將重新啟動.")
+    If blnAnswer Then
+        objShell.Run "wpeutil reboot",0,true
+        Else
+    End If  
+else 
+    MsgBox "Can not find the" & DriveLetterAndFilePath
+end if             
+End Sub
+
+Sub WIN7Capture
+CaptureFromDriveLetter="d:\"
+SaveCaptureToPath="f:\Recovery\WIN7.wim"
+Set objShell = CreateObject("Wscript.Shell")
+blnAnswer = window.confirm("按「確定」開始備份")
+    If blnAnswer Then
+    objShell.Run "ISA.exe /capture " & CaptureFromDriveLetter & " " & SaveCaptureToPath,1,true
+    'ISA.exe /capture <image_path> <image_file>
+    End If
+End Sub
+
+Sub ExitHTA
+        Self.Close()
+End Sub
+
+</script>
+<BODY background="./winpe.bmp">
+<BR><BR>
+<center>
+<img src="./logo.gif">
+<BR><BR><BR>
+<TABLE width="700" height="100" border="0" bgcolor="5086A1"  cellpadding="4">
+<TR>
+<TD bgcolor="5086A1" colspan="2"><DIV class="2" align="center"> 
+歡迎來到系統還原程式 </DIV>
+<BR>
+<DIV class="1" align="center">
+這個程式可以幫助你還原Windows 7到當初備份的狀態.
+<BR>
+再執行之前，請確認你的資料是否都已備份.
+<BR> 
+<BR>
+<font color="FF0000"><B>注意:</B></font> 本程式是按照本機電腦的磁碟代號做設定，請勿外接其他媒體裝置〔因有可能磁碟代號錯誤，造成備份or還原到錯誤的磁碟槽〕。程式執行需要一段時間，請耐心等候，謝謝!!
+<BR>
+<BR>下列是「說明」，須按YES後才能使用。
+<BR>
+</DIV>
+</TD>
+</TR>
+<TR>
+<TD bgcolor="5086A1" colspan="2"><center>
+<textarea name="eula" cols="90" rows="8" readonly> 
+＊ 當你按下【還原WIN7】它會先進行『c:』格式化，再從隱藏分割區取得備份檔將其還原回來
+＊ 當你按下【備份WIN7】是將現有『c:』所有的內容備份到隱藏分割區
+以上的『c:』指得是Windows 7的C槽
+＊ 請特別注意，若你已經備份超過1次以上，還想要再還原到"最初始"的樣子，請【開啟CMD】並下指令 (可用複製/貼上)
+diskpart /s CleanDisk.txt
+isa /apply f:\recovery\bak\win7.wim 1 d:\
+因為此程式保留一份最初始的備份在\bak資料夾下，特殊情況下可供使用。
+</textarea>
+</TD>
+</TR>
+<TR>
+<TD colspan="2" bgcolor="5086A1" >
+<DIV class="1">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <input type="Radio" name="eula" value="Accept Eula" onClick="activate"> &nbsp;&nbsp;
+Yes, 開始使用.
+<BR><BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <input type="Radio" name="eula" value="Decline Eula" onClick="deactivate"> &nbsp;&nbsp;
+No, 先不做.</DIV> </TD>
+</TR>
+</TABLE>
+<BR>
+<TABLE width="700">
+<TR>
+<TD><center><input type="button" value="還原WIN7" name="WIN7_apply_yes" onClick="WIN7Recovery" disabled=true class="btn"></TD>
+<TD><center><input type="button" value="備份WIN7" name="WIN7_capture_yes" onclick="WIN7Capture" disabled="true" class="btn"></td>
+<TD><center><input type="button" value="開啟CMD" name="Cmd_yes" onClick="Cmd" disabled=true class="btn"></TD>
+<TD><center><input type="button" value="離開EXIT" name="no" onClick="ExitHTA" class="btn"> </TD>
+</TR>
+</TABLE>
+</body>
+</HTML>

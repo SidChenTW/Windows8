@@ -1,0 +1,53 @@
+<html> 
+<head> 
+<title>BCDBoot select</title>
+<HTA:APPLICATION 
+  APPLICATIONNAME=¡¨MainModal¡¨>
+</head>
+
+<SCRIPT Language="VBScript">
+Sub Window_onLoad
+        window.resizeTo 600,200
+    End Sub 
+
+Sub BCD_C 
+ blnAnswer = window.confirm("BCD C:")
+ Set objShell = CreateObject("Wscript.Shell")
+    If blnAnswer Then
+		MsgBox "bcdboot c:\windows /s c:"
+        objShell.Run "bcdboot c:\windows /s c:",0,true
+        Else
+    End If  
+End Sub
+
+Sub BCD_D 
+ blnAnswer = window.confirm("BCD D:")
+ Set objShell = CreateObject("Wscript.Shell")
+    If blnAnswer Then
+		MsgBox "bcdboot d:\windows /s d:"
+        objShell.Run "bcdboot d:\windows /s d:",0,true
+        Else
+    End If  
+End Sub
+
+Sub BCD_E 
+ blnAnswer = window.confirm("BCD E:")
+ Set objShell = CreateObject("Wscript.Shell")
+    If blnAnswer Then
+		MsgBox "bcdboot e:\windows /s e:"
+        objShell.Run "bcdboot e:\windows /s e:",0,true
+        Else
+    End If  
+End Sub
+</SCRIPT> 
+
+<body> 
+<TABLE width="300">
+<TR>
+<TD><center><input type="button" value="select BCD C" name="no"  onClick="BCD_C" class="btn"> </TD>
+<TD><center><input type="button" value="select BCD D" name="no"  onClick="BCD_D" class="btn"> </TD>
+<TD><center><input type="button" value="select BCD E" name="no"  onClick="BCD_E" class="btn"> </TD>
+</TR>
+</TABLE>
+</body> 
+</html>

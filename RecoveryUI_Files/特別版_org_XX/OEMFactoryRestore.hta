@@ -1,0 +1,143 @@
+﻿<HTML>
+<HEAD>
+<TITLE>One Button Recovery Solution</TITLE>
+<HTA:APPLICATION
+BORDER = yes
+COMPANY = Microsoft
+APPLICATION = Yes
+WINDOWSTATE = maximize
+INNERBORDER = No
+SHOWINTASKBAR = Yes
+SCROLL = no
+APPLICATIONNAME = "One Button Recovery Solution"
+NAVIGABLE = Yes
+CAPTION = No
+>
+
+<STYLE> 
+.1{color: #FFFFFF; font-family: tahoma; font-size: 8pt; font-weight: bold}
+.2{color: #FFFFFF; font-family: tahoma; font-size: 10pt; font-weight: bold}
+input.btn {color:#FFFFFF; font-family: tahoma; font-size: 10pt; font-weight: bold; width: 220; background-color: #5086A1; border-color: #C0D4EF
+</STYLE>
+</HEAD>
+<script language="VBScript">
+Sub activate
+Cmd_yes.disabled = false
+WIN81_apply_yes.disabled = false
+WIN81_capture_yes.disabled = false
+End Sub
+
+Sub deactivate
+Cmd_yes.disabled = true
+WIN81_apply_yes.disabled = true
+WIN81_capture_yes.disabled = true
+End Sub
+
+Sub Cmd
+Const HKEY_LOCAL_MACHINE = &H80000002
+Set objShell = CreateObject("Wscript.Shell")
+objShell.Run "cmd.exe",1,false
+End Sub
+
+Sub WIN81Recovery
+    Set objShell = CreateObject("Wscript.Shell")
+RecoveryFile="\Recovery\WIN81.wim"
+FindRecoveryFile=0
+'''''''''Serarch the file path which exist the wim file''''''''
+set filesys = CreateObject("Scripting.FileSystemObject")
+For Each DiskDrive in filesys.Drives
+    DriveLetterAndFilePath = DiskDrive.DriveLetter & ":" & RecoveryFile
+    'MsgBox DriveLetterAndFilePath
+    if (filesys.FileExists(DriveLetterAndFilePath)) then
+        FindRecoveryFile=1
+        Set objShell = CreateObject("Wscript.Shell")
+        blnAnswer = window.confirm("Are you sure you want to continue? ALL DATA ON DRIVE C: WILL BE LOST")
+        If blnAnswer Then            
+objShell.Run "diskpart.exe /s x:\Windows\System32\CleanDisk.txt",1,true
+       objShell.Run "dism /Apply-Image /ImageFile:"d:\Recovery\win81.wim" /Index:1 /ApplyDir:c:\",1,true
+       'objShell.Run "bcdboot c:\windows /s c:",0,true
+        Else
+        End If
+    else        
+    End if
+Next
+If  FindRecoveryFile Then
+    blnAnswer = window.confirm("The System will reboot now.")
+    If blnAnswer Then
+        objShell.Run "wpeutil reboot",0,true
+        Else
+    End If  
+else 
+    MsgBox "Can not find the" & DriveLetterAndFilePath
+end if             
+End Sub
+
+Sub WIN81Capture
+CaptureFromDriveLetter="c:\"
+SaveCaptureToPath="d:\Recovery\WIN81.wim"
+Set objShell = CreateObject("Wscript.Shell")
+blnAnswer = window.confirm("Capture")
+    If blnAnswer Then
+    objShell.Run "ISA.exe /capture " & CaptureFromDriveLetter & " " & SaveCaptureToPath,1,true
+    'ISA.exe /capture <image_path> <image_file>
+    End If
+End Sub
+
+Sub ExitHTA
+        Self.Close()
+End Sub
+
+</script>
+<BODY background="./winpe.bmp">
+<BR><BR>
+<center>
+<img src="./logo.gif">
+<BR><BR><BR>
+<TABLE width="700" height="100" border="0" bgcolor="5086A1"  cellpadding="4">
+<TR>
+<TD bgcolor="5086A1" colspan="2"><DIV class="2" align="center"> 
+Welcome to the Microsoft Recovery Solution </DIV>
+<BR>
+<DIV class="1" align="center">
+This program will recover Windows on your computer.
+<BR>
+During this process ALL DATA stored on your Hard Disk will be DELETED. Please backup necessary files before starting to recover.
+<font color="FF0000"><B>CAUTION:</B></font> Please do not remove the USB-Drive from your Computer after starting the Recovery-Process.
+The Recovery Process itself will take a few minutes.
+<BR><BR>
+PLEASE WAIT until the process finish, after that, the Computer reboots automatically
+<BR>
+</DIV>
+</TD>
+</TR>
+<TR>
+<TD bgcolor="5086A1" colspan="2"><center>
+<textarea name="eula" cols="90" rows="3" readonly> 
+Please read the following end-user license agreement (EULA) carefully.
+To use this factory restore option, you must accept the terms of the EULA. 
+    
+LICENSE AGREEMENT TO RESTORE THE PC TO THE ORIGINAL OEM FACTORY STATE, YOU WILL NEED TO ACCEPT THIS AGREEMENT BY SELECTING THE "ACCEPT EULA" BUTTON LOCATED ON THE SCREEN.
+</textarea>
+</TD>
+</TR>
+<TR>
+<TD colspan="2" bgcolor="5086A1" >
+<DIV class="1">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <input type="Radio" name="eula" value="Accept Eula" onClick="activate"> &nbsp;&nbsp;
+Yes, I accept the EULA.
+<BR><BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <input type="Radio" name="eula" value="Decline Eula" onClick="deactivate"> &nbsp;&nbsp;
+No, I decline the EULA.</DIV> </TD>
+</TR>
+</TABLE>
+<BR>
+<TABLE width="700">
+<TR>
+<TD><center><input type="button" value="Start WIN81 Recovery" name="WIN81_apply_yes" onClick="WIN81Recovery" disabled=true class="btn"></TD>
+<TD><center><input type="button" value="Start WIN81 Capture" name="WIN81_capture_yes" onclick="WIN81Capture" disabled="true" class="btn"></td>
+<TD><center><input type="button" value="Start Cmd" name="Cmd_yes" onClick="Cmd" disabled=true class="btn"></TD>
+<TD><center><input type="button" value="Exit the Program" name="no"  onClick="ExitHTA" class="btn"> </TD>
+</TR>
+</TABLE>
+</body>
+</HTML>

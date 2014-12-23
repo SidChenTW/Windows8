@@ -1,0 +1,62 @@
+<html> 
+<head> 
+<title>show dir</title>
+<HTA:APPLICATION 
+  APPLICATIONNAME=¡¨MainModal¡¨>
+</head>
+
+<SCRIPT Language="VBScript">
+Sub Window_onLoad
+        window.resizeTo 600,200
+    End Sub 
+
+Sub DIR_C 
+ 'blnAnswer = window.confirm("DIR C:")
+ Set objShell = CreateObject("Wscript.Shell")
+    'If blnAnswer Then
+		'MsgBox "dir c:\"
+        set cmd = objShell.Exec("cmd /k")        
+		cmd.stdin.writeline("DIR.bat c:\")
+		cmd.stdin.close                        'close stdin  [can't reopen!]
+		objShell.popup cmd.stdout.readall                'get+show output
+        'Else
+    'End If  
+End Sub
+
+Sub DIR_D 
+ 'blnAnswer = window.confirm("DIR D:")
+ Set objShell = CreateObject("Wscript.Shell")
+    'If blnAnswer Then
+		'MsgBox "dir d:\"
+        set cmd = objShell.Exec("cmd /k")        
+		cmd.stdin.writeline("DIR.bat d:\")
+		cmd.stdin.close                        'close stdin  [can't reopen!]
+		objShell.popup cmd.stdout.readall                'get+show output
+        'Else
+    'End If  
+End Sub
+
+Sub DIR_E 
+ 'blnAnswer = window.confirm("DIR E:")
+ Set objShell = CreateObject("Wscript.Shell")
+    'If blnAnswer Then
+		'MsgBox "dir e:\"
+        set cmd = objShell.Exec("cmd /k")        
+		cmd.stdin.writeline("DIR.bat e:\")
+		cmd.stdin.close                        'close stdin  [can't reopen!]
+		objShell.popup cmd.stdout.readall                'get+show output
+        'Else
+    'End If  
+End Sub
+</SCRIPT> 
+
+<body> 
+<TABLE width="300">
+<TR>
+<TD><center><input type="button" value="show C" name="no"  onClick="DIR_C" class="btn"> </TD>
+<TD><center><input type="button" value="show D" name="no"  onClick="DIR_D" class="btn"> </TD>
+<TD><center><input type="button" value="show E" name="no"  onClick="DIR_E" class="btn"> </TD>
+</TR>
+</TABLE>
+</body> 
+</html>
