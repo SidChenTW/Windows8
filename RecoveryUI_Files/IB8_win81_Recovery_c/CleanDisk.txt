@@ -1,0 +1,5 @@
+﻿select disk 0
+select partition 4
+assign letter c
+format fs=ntfs quick
+exit
